@@ -1,0 +1,22 @@
+{
+  "name": "Sadik Sons Tool Custody Network",
+  "short_name": "Sadik Tools",
+  "description": "Internal Equipment & Tool Check-In / Check-Out Network for Sadik Sons",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1D4ED8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./logo-sadik-sons.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./logo-sadik-sons.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

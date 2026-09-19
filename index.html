@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F8FAFC] text-slate-800">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Sadik Sons | Tool Custody & Asset Network</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./logo-sadik-sons.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#1D4ED8">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- QRCode.js for generating QR codes -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  
+  <!-- HTML5 QR Code for camera scanning -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <!-- Canvas Confetti for tactile success -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              200: '#BFDBFE',
+              300: '#93C5FD',
+              400: '#60A5FA',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8', // Primary Royal Corporate Blue
+              800: '#1E40AF',
+              900: '#1E3A8A',
+              950: '#172554'
+            },
+            surface: {
+              base: '#F8FAFC',       // Clean light executive background
+              subtle: '#F1F5F9',     // In-between slate
+              card: '#FFFFFF',       // Pure white cards
+              cardHover: '#F8FAFC',
+              border: '#E2E8F0',     // Crisp borders
+              borderLight: '#F1F5F9',
+              borderDark: '#CBD5E1',
+              navy: '#0F172A',       // Executive dark typography
+              muted: '#64748B'       // Crisp secondary text
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            'card-sm': '0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04)',
+            'card-md': '0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.06)',
+            'card-lg': '0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.08)',
+            'floating-bar': '0 20px 35px -10px rgba(15, 23, 42, 0.12), 0 0 15px rgba(37, 99, 235, 0.06)',
+            'blue-glow': '0 0 20px -3px rgba(37, 99, 235, 0.35)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom sleek corporate scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F8FAFC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Print styles for QR Code labels */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Animated pulse for scanner laser */
+    @keyframes scanLaser {
+      0% { top: 10%; opacity: 0.8; }
+      50% { top: 85%; opacity: 1; }
+      100% { top: 10%; opacity: 0.8; }
+    }
+    .scanner-laser {
+      animation: scanLaser 2.2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface-base antialiased font-sans flex flex-col selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- ================= TOP CORPORATE HEADER ================= -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-surface-border shadow-card-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-3">
+        <div class="relative w-10 h-10 rounded-xl bg-white border border-brand-200 flex items-center justify-center p-1 shadow-sm">
+          <img src="./logo-sadik-sons.png" alt="Sadik Sons Logo" class="w-full h-full object-contain" />
+          <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-brand-600 rounded-full border-2 border-white"></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold tracking-wider text-base text-surface-navy uppercase">Sadik Sons</span>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">ENTERPRISE</span>
+          </div>
+          <p class="text-[11px] text-surface-muted font-mono tracking-tight">TOOL CUSTODY & INVENTORY NETWORK</p>
+        </div>
+      </div>
+
+      <!-- Desktop Search Bar -->
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-surface-muted absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input 
+            id="global-search-input" 
+            type="text" 
+            placeholder="Search tools by name, model, serial #, or brand..." 
+            class="w-full pl-10 pr-4 py-2 text-xs bg-surface-subtle rounded-xl border border-surface-border text-surface-navy placeholder-surface-muted focus:outline-none focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition-all"
+            oninput="handleSearch(this.value)"
+          />
+          <kbd class="hidden sm:inline-block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono px-1.5 py-0.5 bg-white rounded text-surface-muted border border-surface-border">⌘K</kbd>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Add Tool Button -->
+        <button 
+          onclick="openAddToolModal()" 
+          class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-white hover:bg-surface-subtle border border-surface-border text-surface-navy transition-all active:scale-95 shadow-card-sm"
+        >
+          <i data-lucide="plus" class="w-4 h-4 text-brand-600"></i>
+          <span>Add Tool</span>
+        </button>
+
+        <!-- Quick Scan Button (Desktop Header) -->
+        <button 
+          onclick="openScannerModal()" 
+          class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-brand-700 hover:bg-brand-800 text-white transition-all shadow-sm active:scale-95"
+        >
+          <i data-lucide="scan" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Camera Scan</span>
+          <span class="sm:hidden">Scan</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-32">
+    
+    <!-- Mobile Search Bar (visible on small screens) -->
+    <div class="md:hidden mb-4">
+      <div class="relative w-full">
+        <i data-lucide="search" class="w-4 h-4 text-surface-muted absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input 
+          id="mobile-search-input" 
+          type="text" 
+          placeholder="Search tools, serials, technicians..." 
+          class="w-full pl-10 pr-4 py-2.5 text-xs bg-white rounded-2xl border border-surface-border text-surface-navy placeholder-surface-muted focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition-all shadow-card-sm"
+          oninput="handleSearch(this.value)"
+        />
+      </div>
+    </div>
+
+    <!-- TAB 1: OVERVIEW / DASHBOARD -->
+    <section id="view-dashboard" class="space-y-6">
+      
+      <!-- Top Metrics Row -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        
+        <!-- Total Tools -->
+        <div class="bg-white rounded-3xl p-5 border border-surface-border shadow-card-sm hover:border-brand-300 transition-all group">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-surface-muted">Total Tools</span>
+            <div class="w-8 h-8 rounded-xl bg-surface-subtle flex items-center justify-center text-brand-700">
+              <i data-lucide="wrench" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="metric-total-tools" class="text-2xl sm:text-3xl font-extrabold text-surface-navy font-mono">18</span>
+            <span class="text-[11px] text-surface-muted">assets</span>
+          </div>
+          <div class="mt-2 text-[11px] text-brand-700 font-medium flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>All registered with QR</span>
+          </div>
+        </div>
+
+        <!-- In Field (Active Checked Out) - Corporate Blue Highlight -->
+        <div class="bg-gradient-to-b from-brand-50/60 to-white rounded-3xl p-5 border border-brand-200 shadow-card-sm relative overflow-hidden">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-brand-700">In The Field</span>
+            <div class="w-8 h-8 rounded-xl bg-brand-700 text-white flex items-center justify-center font-bold shadow-sm">
+              <i data-lucide="truck" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="metric-in-field" class="text-2xl sm:text-3xl font-extrabold text-brand-700 font-mono">6</span>
+            <span class="text-[11px] text-brand-700 font-medium">with techs</span>
+          </div>
+          <div class="mt-2 text-[11px] text-surface-muted flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+            <span>Active checkouts</span>
+          </div>
+        </div>
+
+        <!-- Available in Tool Crib -->
+        <div class="bg-white rounded-3xl p-5 border border-surface-border shadow-card-sm hover:border-emerald-300 transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-surface-muted">In Tool Crib</span>
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="box" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="metric-available" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-mono">11</span>
+            <span class="text-[11px] text-surface-muted">ready to go</span>
+          </div>
+          <div class="mt-2 text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+            <span>Available now</span>
+          </div>
+        </div>
+
+        <!-- Maintenance / Repair -->
+        <div class="bg-white rounded-3xl p-5 border border-surface-border shadow-card-sm hover:border-amber-300 transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-surface-muted">In Repair</span>
+            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="metric-maintenance" class="text-2xl sm:text-3xl font-extrabold text-amber-600 font-mono">1</span>
+            <span class="text-[11px] text-surface-muted">attention</span>
+          </div>
+          <div class="mt-2 text-[11px] text-amber-600 font-medium flex items-center gap-1">
+            <i data-lucide="wrench" class="w-3.5 h-3.5"></i>
+            <span>Service pending</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Action Floating Card -->
+      <div class="bg-white rounded-3xl p-5 border border-surface-border shadow-card-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <div class="w-11 h-11 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-700 shrink-0">
+            <i data-lucide="qr-code" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-surface-navy">Rapid Check-in & Check-out</h3>
+            <p class="text-xs text-surface-muted">Scan the tool QR or technician badge to transfer custody in seconds.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+          <button onclick="openScannerModal()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-2xl text-xs font-bold bg-brand-700 hover:bg-brand-800 text-white transition-all flex items-center justify-center gap-2 shadow-sm">
+            <i data-lucide="camera" class="w-4 h-4"></i>
+            <span>Open Camera Scanner</span>
+          </button>
+          <button onclick="switchTab('view-print')" class="px-4 py-2.5 rounded-2xl text-xs font-bold bg-surface-subtle hover:bg-slate-200 text-surface-navy border border-surface-border transition-all flex items-center gap-2">
+            <i data-lucide="printer" class="w-4 h-4 text-brand-700"></i>
+            <span class="hidden sm:inline">Print Tool Tags</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid: Active Field Tools + Recent Custody Logs -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Currently in Field (2 Cols on desktop) -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brand-600"></span>
+              <h2 class="text-sm font-bold uppercase tracking-wider text-surface-navy">Active Field Custody</h2>
+              <span id="field-count-pill" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">6 Tools</span>
+            </div>
+            <button onclick="switchTab('view-custody')" class="text-xs text-brand-700 hover:text-brand-800 flex items-center gap-1 font-semibold">
+              <span>View All</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <!-- Active Tools Cards Container -->
+          <div id="dashboard-active-tools-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Recent Activity Audit Log (1 Col) -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 text-surface-muted"></i>
+              <h2 class="text-sm font-bold uppercase tracking-wider text-surface-navy">Recent Custody Logs</h2>
+            </div>
+            <button onclick="switchTab('view-logs')" class="text-xs text-surface-muted hover:text-surface-navy flex items-center gap-1 font-medium">
+              <span>Full Audit</span>
+            </button>
+          </div>
+
+          <div class="bg-white rounded-3xl p-4 border border-surface-border shadow-card-sm space-y-3">
+            <div id="dashboard-recent-logs" class="space-y-3">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 2: FULL INVENTORY CATALOG -->
+    <section id="view-inventory" class="hidden space-y-5">
+      
+      <!-- Catalog Filter Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Category Filter Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full text-xs" id="category-pills">
+          <button onclick="filterCategory('All')" class="category-btn active px-4 py-2 rounded-2xl font-bold bg-brand-700 text-white shadow-sm transition-all">All Tools</button>
+          <button onclick="filterCategory('Heavy Drills')" class="category-btn px-4 py-2 rounded-2xl font-medium bg-white text-surface-muted hover:text-surface-navy border border-surface-border transition-all">Heavy Drills</button>
+          <button onclick="filterCategory('Grinders & Saws')" class="category-btn px-4 py-2 rounded-2xl font-medium bg-white text-surface-muted hover:text-surface-navy border border-surface-border transition-all">Grinders & Saws</button>
+          <button onclick="filterCategory('Electrical & Test')" class="category-btn px-4 py-2 rounded-2xl font-medium bg-white text-surface-muted hover:text-surface-navy border border-surface-border transition-all">Electrical & Test</button>
+          <button onclick="filterCategory('Lasers & Optics')" class="category-btn px-4 py-2 rounded-2xl font-medium bg-white text-surface-muted hover:text-surface-navy border border-surface-border transition-all">Lasers & Optics</button>
+          <button onclick="filterCategory('Power & Generators')" class="category-btn px-4 py-2 rounded-2xl font-medium bg-white text-surface-muted hover:text-surface-navy border border-surface-border transition-all">Power & Gens</button>
+        </div>
+
+        <!-- Status Filter Dropdown & Add Button -->
+        <div class="flex items-center gap-2">
+          <select id="status-filter-select" onchange="filterStatus(this.value)" class="text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-2xl focus:outline-none focus:border-brand-600 shadow-card-sm font-medium">
+            <option value="All">All Statuses</option>
+            <option value="available">Available in Crib</option>
+            <option value="checked_out">In Field (Checked Out)</option>
+            <option value="maintenance">In Maintenance</option>
+          </select>
+          <button onclick="openAddToolModal()" class="px-4 py-2 rounded-2xl text-xs font-bold bg-brand-700 text-white hover:bg-brand-800 flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Add Tool</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tools Grid -->
+      <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </section>
+
+    <!-- TAB 3: FIELD CUSTODY & TECHNICIANS BOARD -->
+    <section id="view-custody" class="hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-surface-navy flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5 text-brand-700"></i>
+            <span>Technician Custody Board</span>
+          </h2>
+          <p class="text-xs text-surface-muted">Real-time accountability of who holds company tools and at which job site.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono font-semibold text-brand-700 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">5 Registered Technicians</span>
+        </div>
+      </div>
+
+      <!-- Technician Cards Grid -->
+      <div id="technicians-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </section>
+
+    <!-- TAB 4: PRINT STUDIO (QR CODE LABEL MAKER) -->
+    <section id="view-print" class="space-y-6 hidden">
+      
+      <div class="bg-white rounded-3xl p-6 border border-surface-border shadow-card-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-brand-700 mb-1">
+            <i data-lucide="printer" class="w-5 h-5"></i>
+            <span class="font-extrabold text-sm uppercase tracking-wider">Industrial QR Tag Studio</span>
+          </div>
+          <h2 class="text-lg font-bold text-surface-navy">Batch Print Tool Asset Labels</h2>
+          <p class="text-xs text-surface-muted max-w-xl mt-1">
+            Print crisp, high-contrast tags with Sadik Sons branding. Attach these to tools via laser metal plates, waterproof vinyl stickers, or zip-tie tags.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <button onclick="generateAllPrintTags()" class="px-4 py-2.5 rounded-2xl text-xs font-bold bg-surface-subtle hover:bg-slate-200 text-surface-navy border border-surface-border transition-all flex items-center gap-2">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Select All Tools</span>
+          </button>
+          <button onclick="window.print()" class="flex-1 md:flex-none px-5 py-2.5 rounded-2xl text-xs font-bold bg-brand-700 hover:bg-brand-800 text-white transition-all flex items-center justify-center gap-2 shadow-sm">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Print Label Sheet (A4)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Area Container -->
+      <div id="print-area" class="bg-white rounded-3xl p-6 border border-surface-border shadow-card-sm">
+        <div class="mb-4 pb-3 border-b border-surface-border flex items-center justify-between text-xs text-surface-muted">
+          <span class="font-mono uppercase font-bold text-surface-navy">Sadik Sons • Tool Tag Batch Sheet (A4 Ready)</span>
+          <span id="print-tag-count" class="font-bold text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">18 Labels</span>
+        </div>
+
+        <div id="print-tags-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 5: AUDIT HISTORY LOGS -->
+    <section id="view-logs" class="hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-surface-navy flex items-center gap-2">
+            <i data-lucide="file-clock" class="w-5 h-5 text-brand-700"></i>
+            <span>Custody Audit Trail</span>
+          </h2>
+          <p class="text-xs text-surface-muted">Permanent chronological record of every tool movement, check-out, and return.</p>
+        </div>
+        <button onclick="exportLogsCSV()" class="px-3.5 py-2 rounded-2xl text-xs font-bold bg-white hover:bg-surface-subtle text-surface-navy border border-surface-border flex items-center gap-2 shadow-card-sm">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-brand-700"></i>
+          <span>Export CSV</span>
+        </button>
+      </div>
+
+      <!-- History Table Container -->
+      <div class="bg-white rounded-3xl border border-surface-border shadow-card-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-surface-muted">
+            <thead class="bg-surface-subtle text-surface-navy font-mono uppercase text-[10px] tracking-wider border-b border-surface-border">
+              <tr>
+                <th class="py-3 px-4">Timestamp</th>
+                <th class="py-3 px-4">Action</th>
+                <th class="py-3 px-4">Tool Name & Serial</th>
+                <th class="py-3 px-4">Technician</th>
+                <th class="py-3 px-4">Job Site</th>
+                <th class="py-3 px-4">Condition</th>
+                <th class="py-3 px-4">Notes</th>
+              </tr>
+            </thead>
+            <tbody id="audit-logs-table-body" class="divide-y divide-surface-border font-sans">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FLOATING DETACHED BOTTOM NAVIGATION BAR (BLUE & WHITE LUXURY EDITION) ================= -->
+  <nav class="fixed bottom-5 inset-x-4 max-w-lg mx-auto z-40">
+    <div class="bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-[32px] px-3 py-2 flex items-center justify-between shadow-floating-bar relative">
+      
+      <!-- Tab 1: Dashboard -->
+      <button 
+        onclick="switchTab('view-dashboard')" 
+        id="nav-btn-dashboard" 
+        class="nav-tab-btn active flex-1 flex flex-col items-center justify-center py-1 text-brand-700 transition-all group"
+      >
+        <i data-lucide="layout-grid" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
+        <span class="text-[10px] font-bold mt-1 tracking-tight">Overview</span>
+      </button>
+
+      <!-- Tab 2: Inventory -->
+      <button 
+        onclick="switchTab('view-inventory')" 
+        id="nav-btn-inventory" 
+        class="nav-tab-btn flex-1 flex flex-col items-center justify-center py-1 text-surface-muted hover:text-brand-700 transition-all group"
+      >
+        <i data-lucide="wrench" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
+        <span class="text-[10px] font-medium mt-1 tracking-tight">Tools</span>
+      </button>
+
+      <!-- ELEVATED CENTER ACTION BUTTON: SCAN QR (SADIK SONS ROYAL BLUE) -->
+      <div class="relative -mt-7 px-2 flex justify-center">
+        <button 
+          onclick="openScannerModal()" 
+          class="w-14 h-14 rounded-full bg-brand-700 text-white flex items-center justify-center shadow-lg shadow-brand-700/35 hover:bg-brand-800 hover:scale-105 active:scale-95 transition-all border-4 border-white group"
+          title="Scan Tool QR"
+        >
+          <i data-lucide="scan-line" class="w-6 h-6 stroke-[2.5] transition-transform group-hover:rotate-12"></i>
+        </button>
+      </div>
+
+      <!-- Tab 3: Custody (Technicians) -->
+      <button 
+        onclick="switchTab('view-custody')" 
+        id="nav-btn-custody" 
+        class="nav-tab-btn flex-1 flex flex-col items-center justify-center py-1 text-surface-muted hover:text-brand-700 transition-all group"
+      >
+        <i data-lucide="users" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
+        <span class="text-[10px] font-medium mt-1 tracking-tight">Custody</span>
+      </button>
+
+      <!-- Tab 4: Print Tags Studio -->
+      <button 
+        onclick="switchTab('view-print')" 
+        id="nav-btn-print" 
+        class="nav-tab-btn flex-1 flex flex-col items-center justify-center py-1 text-surface-muted hover:text-brand-700 transition-all group"
+      >
+        <i data-lucide="printer" class="w-5 h-5 transition-transform group-hover:scale-110"></i>
+        <span class="text-[10px] font-medium mt-1 tracking-tight">QR Tags</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ================= MODAL: CAMERA QR SCANNER ================= -->
+  <div id="modal-scanner" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-surface-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+      
+      <!-- Scanner Header -->
+      <div class="p-4 bg-brand-50 border-b border-brand-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-brand-700 text-white flex items-center justify-center">
+            <i data-lucide="scan" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-surface-navy">Live Camera QR Scanner</h3>
+            <p class="text-[11px] text-surface-muted">Align tool QR tag inside frame</p>
+          </div>
+        </div>
+        <button onclick="closeScannerModal()" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-surface-muted hover:text-surface-navy flex items-center justify-center border border-surface-border shadow-sm">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Camera Viewport Box -->
+      <div class="p-5 flex flex-col items-center justify-center bg-slate-900 relative">
+        <div class="w-full max-w-[280px] h-[280px] rounded-2xl overflow-hidden relative border-2 border-brand-400 shadow-blue-glow bg-black">
+          
+          <!-- Live Camera Video Container -->
+          <div id="qr-reader" class="w-full h-full"></div>
+          
+          <!-- Tactical Reticle Overlays -->
+          <div class="absolute inset-0 pointer-events-none p-3 flex flex-col justify-between">
+            <div class="flex justify-between">
+              <div class="w-4 h-4 border-t-2 border-l-2 border-brand-400"></div>
+              <div class="w-4 h-4 border-t-2 border-r-2 border-brand-400"></div>
+            </div>
+            <!-- Laser line -->
+            <div class="w-full h-0.5 bg-brand-400 shadow-blue-glow scanner-laser absolute left-0"></div>
+            <div class="flex justify-between">
+              <div class="w-4 h-4 border-b-2 border-l-2 border-brand-400"></div>
+              <div class="w-4 h-4 border-b-2 border-r-2 border-brand-400"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="text-[11px] text-slate-300 mt-3 text-center">
+          Point phone or webcam directly at the Sadik Sons QR label.
+        </p>
+
+        <!-- Test / Quick Pick Dropdown -->
+        <div class="mt-4 w-full pt-3 border-t border-slate-800">
+          <label class="block text-[11px] font-mono text-slate-400 mb-1 text-center">Quick Select (Desktop Simulation):</label>
+          <select id="quick-tool-picker" onchange="simulateScan(this.value)" class="w-full text-xs bg-slate-800 border border-slate-700 text-white px-3 py-2 rounded-xl focus:outline-none focus:border-brand-400">
+            <option value="">-- Choose a tool to simulate scanning --</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CHECK-OUT TOOL ================= -->
+  <div id="modal-checkout" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-surface-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+      
+      <!-- Checkout Header -->
+      <div class="p-4 bg-brand-50 border-b border-brand-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-brand-700 text-white flex items-center justify-center font-bold shadow-sm">
+            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-brand-700">AUTHORIZATION</span>
+            <h3 class="text-sm font-bold text-surface-navy">Check-Out Tool to Field</h3>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-checkout')" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-surface-muted hover:text-surface-navy flex items-center justify-center border border-surface-border">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Checkout Body -->
+      <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="p-5 space-y-4">
+        
+        <!-- Tool Preview Card -->
+        <div id="checkout-tool-preview" class="p-3.5 rounded-2xl bg-surface-subtle border border-surface-border flex items-center gap-3">
+          <!-- Dynamic -->
+        </div>
+
+        <!-- Technician Selection -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-brand-700"></i>
+            <span>Assign To Technician:</span>
+          </label>
+          <select id="checkout-technician-select" required class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2.5 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100">
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+
+        <!-- Job Site Selection -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-700"></i>
+            <span>Target Job Site / Project:</span>
+          </label>
+          <select id="checkout-site-select" required class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2.5 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100">
+            <option value="Tripoli Port Project">Tripoli Port Project</option>
+            <option value="Benghazi Substation A">Benghazi Substation A</option>
+            <option value="Al-Andalus Commercial Center">Al-Andalus Commercial Center</option>
+            <option value="Misrata Industrial Zone">Misrata Industrial Zone</option>
+            <option value="Central Workshop">Central Workshop</option>
+          </select>
+        </div>
+
+        <!-- Expected Return Date -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-700"></i>
+            <span>Expected Return:</span>
+          </label>
+          <input id="checkout-return-date" type="date" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+        </div>
+
+        <!-- Notes -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5">Accessories & Notes:</label>
+          <input id="checkout-notes" type="text" placeholder="e.g. 2x 18V batteries, 1x charger, carrying case" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" onclick="closeModal('modal-checkout')" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-surface-subtle text-surface-muted hover:text-surface-navy border border-surface-border">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-brand-700 hover:bg-brand-800 text-white shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Confirm Check-Out</span>
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CHECK-IN / RETURN TOOL ================= -->
+  <div id="modal-checkin" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-surface-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+      
+      <!-- Checkin Header -->
+      <div class="p-4 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-sm">
+            <i data-lucide="arrow-down-left" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-emerald-700">TOOL CRIB RETURN</span>
+            <h3 class="text-sm font-bold text-surface-navy">Check-In Tool</h3>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-checkin')" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-surface-muted hover:text-surface-navy flex items-center justify-center border border-surface-border">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Checkin Body -->
+      <form id="checkin-form" onsubmit="handleCheckinSubmit(event)" class="p-5 space-y-4">
+        
+        <!-- Tool Preview Card -->
+        <div id="checkin-tool-preview" class="p-3.5 rounded-2xl bg-surface-subtle border border-surface-border flex items-center gap-3">
+          <!-- Dynamic -->
+        </div>
+
+        <!-- Tool Condition Upon Return -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>Returned Condition:</span>
+          </label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-surface-border rounded-xl p-2.5 text-center bg-white hover:border-emerald-500 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50 shadow-card-sm">
+              <input type="radio" name="return-condition" value="Good" checked class="sr-only">
+              <span class="block text-xs font-bold text-emerald-700">Good</span>
+              <span class="block text-[10px] text-surface-muted mt-0.5">Ready to re-issue</span>
+            </label>
+            <label class="cursor-pointer border border-surface-border rounded-xl p-2.5 text-center bg-white hover:border-amber-500 has-[:checked]:border-amber-600 has-[:checked]:bg-amber-50 shadow-card-sm">
+              <input type="radio" name="return-condition" value="Needs Service" class="sr-only">
+              <span class="block text-xs font-bold text-amber-700">Needs Service</span>
+              <span class="block text-[10px] text-surface-muted mt-0.5">Clean / Oil / Blade</span>
+            </label>
+            <label class="cursor-pointer border border-surface-border rounded-xl p-2.5 text-center bg-white hover:border-rose-500 has-[:checked]:border-rose-600 has-[:checked]:bg-rose-50 shadow-card-sm">
+              <input type="radio" name="return-condition" value="Damaged" class="sr-only">
+              <span class="block text-xs font-bold text-rose-700">Damaged</span>
+              <span class="block text-[10px] text-surface-muted mt-0.5">Lock for repair</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Shelf Location in Crib -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5">Returned to Storage Bin / Shelf:</label>
+          <input id="checkin-shelf" type="text" placeholder="e.g. Rack B-04" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600" />
+        </div>
+
+        <!-- Return Notes -->
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1.5">Return Remarks:</label>
+          <input id="checkin-notes" type="text" placeholder="e.g. Returned all bits and charger" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600" />
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" onclick="closeModal('modal-checkin')" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-surface-subtle text-surface-muted hover:text-surface-navy border border-surface-border">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="check-check" class="w-4 h-4"></i>
+            <span>Confirm Return to Crib</span>
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADD NEW TOOL ================= -->
+  <div id="modal-add-tool" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-surface-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+      
+      <div class="p-4 bg-brand-50 border-b border-brand-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-brand-700 text-white flex items-center justify-center font-bold">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-surface-navy">Register New Tool</h3>
+            <p class="text-[11px] text-surface-muted">Creates QR code asset profile</p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-add-tool')" class="w-8 h-8 rounded-full bg-white hover:bg-slate-100 text-surface-muted hover:text-surface-navy flex items-center justify-center border border-surface-border">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="add-tool-form" onsubmit="handleAddToolSubmit(event)" class="p-5 space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1">Tool Name:</label>
+          <input id="new-tool-name" type="text" required placeholder="e.g. Hilti Cordless Rotary Hammer" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-surface-navy mb-1">Brand:</label>
+            <input id="new-tool-brand" type="text" required placeholder="Hilti, Bosch, DeWalt..." class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-surface-navy mb-1">Model / Specs:</label>
+            <input id="new-tool-model" type="text" placeholder="TE 70-ATC 18V" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-surface-navy mb-1">Category:</label>
+            <select id="new-tool-category" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600">
+              <option value="Heavy Drills">Heavy Drills</option>
+              <option value="Grinders & Saws">Grinders & Saws</option>
+              <option value="Electrical & Test">Electrical & Test</option>
+              <option value="Lasers & Optics">Lasers & Optics</option>
+              <option value="Power & Generators">Power & Generators</option>
+              <option value="Hand Tools">Hand Tools</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-surface-navy mb-1">Serial Number:</label>
+            <input id="new-tool-serial" type="text" required placeholder="SN-XXXX-99" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600 font-mono" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-surface-navy mb-1">Crib Storage Shelf:</label>
+          <input id="new-tool-shelf" type="text" placeholder="e.g. Rack A-02" class="w-full text-xs bg-white border border-surface-border text-surface-navy px-3 py-2 rounded-xl focus:outline-none focus:border-brand-600" />
+        </div>
+
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" onclick="closeModal('modal-add-tool')" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-surface-subtle text-surface-muted hover:text-surface-navy border border-surface-border">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-brand-700 hover:bg-brand-800 text-white shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Save & Generate QR</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT APPLICATION CORE ================= -->
+  <script src="./app.js"></script>
+</body>
+</html>
