@@ -6,7 +6,7 @@ An internal enterprise equipment tracking, check-in, and check-out network syste
 
 <br>
 
-<a href="https://github.com/znacer99/sadik-sons-tools/archive/refs/heads/master.zip">
+<a href="https://github.com/znacer99/sadik-sons-tools/archive/refs/heads/main.zip">
   <img src="https://img.shields.io/badge/⬇%EF%B8%8F_DOWNLOAD_SYSTEM-(ONE--CLICK_ZIP)-1D4ED8?style=for-the-badge&logo=windows&logoColor=white" height="48" alt="Download Now (One-Click ZIP)">
 </a>
 
