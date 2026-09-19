@@ -1,40 +1,42 @@
+<div align="center">
+
 # ⚡ Sadik Sons | Tool Custody & Asset Network
 
-An internal enterprise tool tracking, check-in, and check-out network system built for **Sadik Sons**.
+An internal enterprise equipment tracking, check-in, and check-out network system.
+
+<br>
+
+<a href="https://github.com/znacer99/sadik-sons-tools/archive/refs/heads/main.zip">
+  <img src="https://img.shields.io/badge/⬇%EF%B8%8F_DOWNLOAD_SYSTEM-(ONE--CLICK_ZIP)-1D4ED8?style=for-the-badge&logo=windows&logoColor=white" height="48" alt="Download Now (One-Click ZIP)">
+</a>
+
+<br><br>
+
+</div>
 
 ---
 
-## 🪟 How to Install & Run on Windows
+## 🚀 3-Step Setup for Windows
 
-### Requirements:
-1. Install **Node.js** (LTS version, 1-minute install): https://nodejs.org
-2. That's it! (No SQL server to install — SQLite is built-in).
+### Step 1: Download
+Click the big blue **[DOWNLOAD SYSTEM]** button above (or download from GitHub).
 
-### Quick Start:
-1. **Clone or Download this repository:**
-   ```bash
-   git clone <YOUR_GITHUB_REPO_URL>
-   cd sadik-sons-tools
-   ```
-   *(Or click green **Code -> Download ZIP** on GitHub and unzip it anywhere, e.g., `C:\SadikSonsTools`)*.
+### Step 2: Extract
+Right-click the downloaded `.zip` file $\rightarrow$ **Extract All** (e.g. to `C:\SadikSonsTools` or Desktop).
 
-2. **Launch the Desktop Application:**
-   * Double-click **`Start_Sadik_Sons_Tools_Windows.bat`**!
-   * It starts the local SQLite server and immediately opens the dedicated desktop window.
+### Step 3: Run
+1. Make sure **[Node.js](https://nodejs.org)** is installed (1-minute free install if you don't have it).
+2. Double-click **`Start_Sadik_Sons_Tools_Windows.bat`**!
+3. The desktop software window will open automatically.
 
-3. **Create a Desktop Shortcut:**
-   * Right-click `Start_Sadik_Sons_Tools_Windows.bat` $\rightarrow$ **Send to -> Desktop (create shortcut)**.
-   * Rename it to **"Sadik Sons Tools"**.
-   * Now the warehouse manager can open it anytime directly from their Windows desktop!
+> **💡 Desktop Shortcut:** Right-click `Start_Sadik_Sons_Tools_Windows.bat` $\rightarrow$ **Send to $\rightarrow$ Desktop (create shortcut)**.
 
 ---
 
-## 🍏 How to Run on macOS
+## 🍏 For macOS Users
 
-1. **In Launchpad or Finder:**
-   * Open **Launchpad** or go to `/Applications`.
-   * Click **Sadik Sons Tools**!
-2. **Or from Terminal:**
+1. Open **Launchpad** on your Mac $\rightarrow$ Click **Sadik Sons Tools**!
+2. Or in terminal:
    ```bash
    node server.cjs
    ```
@@ -42,14 +44,16 @@ An internal enterprise tool tracking, check-in, and check-out network system bui
 
 ---
 
-## 📱 How Technicians Use It on Phones (Android & iPhone)
+## 📱 For Technicians on Phones (Android & iPhone)
 
 * **No App Store / Play Store download needed!**
-* Connect the phone to the company Wi-Fi (or 4G if using Cloudflare/domain).
-* Point the phone's regular camera at any physical QR tag on a tool.
-* The phone opens:
-  ```
-  http://<OFFICE_IP>:3000/scan?id=SS-TL-001
-  ```
-* **To Check Out:** Technician selects their name $\rightarrow$ selects Job Site $\rightarrow$ taps **Confirm Check-Out**.
-* **To Return:** Technician taps **Confirm Return to Crib** and selects condition (Good / Needs Service / Damaged).
+* Point your phone's normal camera at any physical QR tag on a tool.
+* Tap the link that appears:
+  * **To Check Out:** Select your name $\rightarrow$ Select Job Site $\rightarrow$ Tap **Confirm Check-Out**.
+  * **To Return:** Tap **Confirm Return to Crib** and pick condition (**Good**, **Needs Service**, or **Damaged**).
+
+---
+
+<div align="center">
+  <sub>SADIK SONS INDUSTRIAL CUSTODY NETWORK • 2026</sub>
+</div>
