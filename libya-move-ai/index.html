@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIBYA MOVE AI | البنية التحتية الرقمية للتنقل الذكي في ليبيا</title>
+  <meta name="description" content="منظومة التنقل الذكي وإدارة أساطيل النقل في ليبيا - طرابلس الكبرى. نموذج أعمال فائق الكفاءة، ذكاء اصطناعي، وخدمات مؤسسية B2B." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Alexandria & IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Chart.js for Financial Simulator -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              obsidian: '#070a11',
+              panel: '#0d1322',
+              card: '#131b2e',
+              elevated: '#1a243d',
+              border: 'rgba(255, 255, 255, 0.08)',
+              emerald: '#10b981',
+              emeraldMuted: 'rgba(16, 185, 129, 0.12)',
+              steel: '#38bdf8',
+              slateText: '#94a3b8'
+            }
+          },
+          fontFamily: {
+            alex: ['Alexandria', 'sans-serif'],
+            body: ['IBM Plex Sans Arabic', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#070a11] text-slate-100 min-h-screen selection:bg-[#10b981] selection:text-black">
+
+  <!-- Top Global Header -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-white/[0.06] px-4 lg:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-9 h-9 rounded-lg bg-slate-900 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+          <i data-lucide="network" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-semibold text-lg lg:text-xl tracking-tight text-white">
+              LIBYA MOVE <span class="text-emerald-400 font-light">AI</span>
+            </span>
+            <span class="text-[10px] font-medium tracking-wider uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Tripoli Core
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden sm:block">البنية التحتية الرقمية للتنقل الذكي وإدارة الحركة</p>
+        </div>
+      </div>
+
+      <!-- Module Navigation Tabs -->
+      <nav class="flex items-center bg-[#0d1322] p-1 rounded-xl border border-white/[0.06] text-xs font-medium overflow-x-auto max-w-full">
+        <button onclick="switchTab('rider')" id="tab-rider" class="nav-tab-btn active px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>منظومة الركاب</span>
+        </button>
+        <button onclick="switchTab('driver')" id="tab-driver" class="nav-tab-btn px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white">
+          <i data-lucide="navigation" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>بوابة السائق المحترف</span>
+        </button>
+        <button onclick="switchTab('business')" id="tab-business" class="nav-tab-btn px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white">
+          <i data-lucide="building" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>حلول المؤسسات B2B</span>
+        </button>
+        <button onclick="switchTab('admin')" id="tab-admin" class="nav-tab-btn px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>مركز القيادة الذكي</span>
+        </button>
+        <button onclick="switchTab('financial')" id="tab-financial" class="nav-tab-btn px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white">
+          <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>النموذج المالي</span>
+        </button>
+        <button onclick="switchTab('costs')" id="tab-costs" class="nav-tab-btn px-3.5 py-2 rounded-lg flex items-center gap-2 transition-all text-slate-400 hover:text-white">
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>تكاليف التأسيس والميزانية</span>
+        </button>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openDocsModal()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/[0.08] text-xs font-medium flex items-center gap-1.5 transition">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>الملف الاستثماري والمستندات</span>
+        </button>
+        <div class="hidden xl:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-white/[0.06] text-xs text-slate-300">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>شبكة طرابلس متصلة</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-7">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: MOVE RIDER (PASSENGER)             -->
+    <!-- ========================================== -->
+    <section id="view-rider" class="tab-content transition-opacity duration-200">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Context & Architecture Summary -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 text-xs font-medium mb-3 border border-emerald-500/20">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              تجربة التنقل الحضري الموجه
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white tracking-tight leading-snug">
+              نظام طلب خوارزمي يمنح الراكب حرية اختيار السائق وتسعيراً واضحاً
+            </h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              تعتمد المنصة على خوارزمية <strong class="text-slate-200">Move Choice</strong> لعرض السائقين المتاحين في محيط الانطلاق مع بيانات دقيقة عن تقييم المركبة، وقت الوصول، والسعر المباشر.
+            </p>
+
+            <div class="mt-5 space-y-2.5">
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">Move Choice — الاختيار الذاتي</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5">معاينة عروض السائقين القريبين واختيار الأنسب دون فرض آلي قسري.</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="corner-down-left" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">Smart Return Ride — تحسين مسار العودة</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5">خصم خوارزمي 20% عند حجز مقعد في اتجاه عودة السائق من تاجوراء أو جنزور أو المطار.</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">بروتوكول السلامة ورمز PIN</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5">تحقق ثنائي برمز PIN رقمي قبل انطلاق الرحلة ومراقبة الانحراف عن المسار لحظياً.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Operational Metric Highlights -->
+            <div class="mt-5 p-3.5 rounded-xl bg-slate-900/60 border border-white/[0.06] flex items-center justify-between text-xs">
+              <div>
+                <span class="text-slate-400 block text-[11px]">متوسط زمن الوصول (ETA):</span>
+                <span class="font-heading font-semibold text-white mt-0.5 block text-sm">4.2 دقيقة</span>
+              </div>
+              <div class="text-right">
+                <span class="text-slate-400 block text-[11px]">المركبات النشطة في النطاق:</span>
+                <span class="font-heading font-semibold text-emerald-400 mt-0.5 block text-sm">18 مركبة</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Device Hardware Simulator -->
+        <div class="lg:col-span-8 flex justify-center">
+          <div class="device-frame">
+            
+            <div class="device-speaker-notch"></div>
+            
+            <!-- Status Bar -->
+            <div class="h-9 px-6 pt-2 flex items-center justify-between text-[11px] text-slate-400 select-none z-20">
+              <span id="phone-clock">15:30</span>
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="wifi" class="w-3 h-3 text-slate-400"></i>
+                <i data-lucide="battery" class="w-3 h-3 text-slate-400"></i>
+                <span class="text-[10px] text-slate-400">LTE</span>
+              </div>
+            </div>
+
+            <!-- In-App Header -->
+            <div class="px-5 py-2.5 flex items-center justify-between border-b border-white/[0.06] bg-[#0d1322] z-20">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-slate-800 border border-white/10 flex items-center justify-center text-xs font-semibold text-slate-200">
+                  M
+                </div>
+                <span class="font-heading font-semibold text-xs text-white">تطبيق الركاب</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-[11px] text-slate-300 border border-white/[0.06] font-mono">
+                  54.50 LYD
+                </span>
+                <div class="w-6 h-6 rounded-full bg-slate-800 border border-white/[0.08] flex items-center justify-center text-[10px] font-semibold text-slate-300">
+                  ع.ل
+                </div>
+              </div>
+            </div>
+
+            <!-- Tripoli Leaflet Map Container -->
+            <div class="relative flex-1 w-full min-h-[340px] z-10">
+              <div id="rider-map" class="w-full h-full"></div>
+              
+              <!-- Recenter Button -->
+              <div class="absolute top-3 right-3 z-[400]">
+                <button onclick="recenterTripoliMap()" title="إعادة تركيز الخريطة على طرابلس" class="w-8 h-8 rounded-lg bg-[#0d1322] text-slate-300 border border-white/10 flex items-center justify-center shadow-lg hover:text-white transition">
+                  <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <!-- Map Status Pill -->
+              <div id="rider-map-alert" class="absolute top-3 left-3 right-14 z-[400] bg-[#0d1322]/90 backdrop-blur px-3 py-1.5 rounded-lg border border-white/[0.08] text-[11px] text-slate-300 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span id="map-status-text">تم رصد 5 مركبات نشطة في محيط 2.5 كم</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Booking Control Panel -->
+            <div class="bg-[#0d1322] border-t border-white/[0.06] px-4 py-3.5 z-20 space-y-3">
+              
+              <!-- Location Selectors -->
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-[#070a11] border border-white/[0.06] text-xs">
+                  <div class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></div>
+                  <div class="flex-1">
+                    <span class="text-[10px] text-slate-500 block">نقطة الانطلاق:</span>
+                    <select id="pickup-select" onchange="calculateFareEstimate()" class="w-full bg-transparent text-slate-200 font-medium focus:outline-none cursor-pointer text-xs">
+                      <option value="martyrs" selected>ميدان الشهداء - طرابلس المركز</option>
+                      <option value="tower">برج طرابلس - طريق الشط</option>
+                      <option value="andalus">حي الأندلس - شارع القرقارشي</option>
+                      <option value="ashour">بن عاشور - شارع الظل</option>
+                      <option value="jumaa">سوق الجمعة - بجانب مركز المدينة</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-[#070a11] border border-white/[0.06] text-xs">
+                  <div class="w-2 h-2 rounded-full bg-slate-400 shrink-0"></div>
+                  <div class="flex-1">
+                    <span class="text-[10px] text-slate-500 block">الوجهة:</span>
+                    <select id="dropoff-select" onchange="calculateFareEstimate()" class="w-full bg-transparent text-slate-200 font-medium focus:outline-none cursor-pointer text-xs">
+                      <option value="ashour" selected>بن عاشور - شارع الجرابة</option>
+                      <option value="andalus">حي الأندلس - السياحية</option>
+                      <option value="mitiga">مطار معيتيقة الدولي (Mitiga Airport)</option>
+                      <option value="tajoura">تاجوراء - الطريق الساحلي</option>
+                      <option value="janzour">جنزور - حي المعاقين</option>
+                      <option value="tripoli_intl">مطار طرابلس العالمي الجديد</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Type Badges -->
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs select-none">
+                <button onclick="selectServiceType('taxi')" id="service-taxi" class="service-chip active shrink-0 px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-medium">
+                  Move Standard
+                </button>
+                <button onclick="selectServiceType('choice')" id="service-choice" class="service-chip shrink-0 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-slate-300 font-medium hover:text-white">
+                  Move Choice
+                </button>
+                <button onclick="selectServiceType('share')" id="service-share" class="service-chip shrink-0 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-slate-300 font-medium hover:text-white">
+                  Move Share (-40%)
+                </button>
+                <button onclick="selectServiceType('return')" id="service-return" class="service-chip shrink-0 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-slate-300 font-medium hover:text-white">
+                  Smart Return (-20%)
+                </button>
+                <button onclick="selectServiceType('airport')" id="service-airport" class="service-chip shrink-0 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-slate-300 font-medium hover:text-white">
+                  Airport Executive
+                </button>
+                <button onclick="selectServiceType('women')" id="service-women" class="service-chip shrink-0 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-slate-900 text-slate-300 font-medium hover:text-white">
+                  Move Women
+                </button>
+              </div>
+
+              <!-- Fare & Payment Selector -->
+              <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#070a11] border border-white/[0.06] text-xs">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">التكلفة التقديرية للرحلة:</span>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="fare-price" class="text-base font-semibold font-mono text-white">18.50</span>
+                    <span class="text-[11px] text-slate-400">دينار ليبي</span>
+                  </div>
+                </div>
+
+                <div class="text-left">
+                  <span class="text-[10px] text-slate-400 block text-right">وسيلة الدفع:</span>
+                  <select id="payment-method-select" class="bg-slate-900 text-slate-200 text-xs px-2.5 py-1 rounded border border-white/[0.08] focus:outline-none cursor-pointer">
+                    <option value="cash">الدفع النقدي (Cash)</option>
+                    <option value="sadad">خدمة سداد (Sadad - المدار)</option>
+                    <option value="mobicash">موبي كاش (MobiCash)</option>
+                    <option value="tadawul">منظومة تداول (Tadawul)</option>
+                    <option value="wallet">محفظة Move Wallet</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- MOVE CHOICE DRIVER PICKER (Hidden by default) -->
+              <div id="choice-driver-picker" class="hidden space-y-1.5 p-2.5 rounded-lg bg-[#070a11] border border-white/[0.08]">
+                <span class="text-[11px] font-medium text-slate-300 flex items-center gap-1.5">
+                  <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  خيارات السائقين المتاحين (اختر المناسب):
+                </span>
+                <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                  <div onclick="pickSpecificDriver(1)" id="choice-card-1" class="p-2 rounded bg-slate-900 border border-emerald-500/40 cursor-pointer transition">
+                    <span class="font-medium text-white block">طارق و.</span>
+                    <span class="text-slate-400 block">إلنترا 2021</span>
+                    <span class="text-emerald-400 font-mono font-medium block">18.50 د.ل</span>
+                    <span class="text-[9px] text-slate-400">3 دقائق • 4.9</span>
+                  </div>
+                  <div onclick="pickSpecificDriver(2)" id="choice-card-2" class="p-2 rounded bg-slate-900 border border-white/[0.06] cursor-pointer transition">
+                    <span class="font-medium text-white block">مروان ق.</span>
+                    <span class="text-slate-400 block">سيراتو 2020</span>
+                    <span class="text-slate-300 font-mono font-medium block">17.00 د.ل</span>
+                    <span class="text-[9px] text-slate-400">5 دقائق • 4.8</span>
+                  </div>
+                  <div onclick="pickSpecificDriver(3)" id="choice-card-3" class="p-2 rounded bg-slate-900 border border-white/[0.06] cursor-pointer transition">
+                    <span class="font-medium text-white block">أحمد م.</span>
+                    <span class="text-slate-400 block">كامري Executive</span>
+                    <span class="text-slate-300 font-mono font-medium block">24.00 د.ل</span>
+                    <span class="text-[9px] text-slate-400">2 دقيقة • 5.0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Booking Action Button -->
+              <button onclick="requestTripSimulation()" id="btn-request-trip" class="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-heading font-semibold text-xs tracking-wide shadow-md flex items-center justify-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>تأكيد طلب الرحلة</span>
+              </button>
+
+              <!-- ACTIVE RIDE IN PROGRESS MODAL (Hidden by default) -->
+              <div id="active-ride-card" class="hidden p-3 rounded-lg bg-[#070a11] border border-emerald-500/30 space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded bg-slate-800 border border-white/10 flex items-center justify-center text-xs font-semibold text-slate-200">
+                      ط
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-medium text-white" id="active-driver-name">طارق الورفلي</h4>
+                      <p class="text-[10px] text-slate-400">هيونداي إلنترا 2021 • <span class="text-slate-300">5-89412 طرابلس</span></p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[10px] text-slate-400">رمز التحقق (PIN)</div>
+                    <div class="text-sm font-mono font-semibold tracking-widest text-emerald-400">7429</div>
+                  </div>
+                </div>
+
+                <!-- Live progress bar -->
+                <div class="w-full bg-slate-900 rounded-full h-1 overflow-hidden">
+                  <div id="ride-progress-bar" class="bg-emerald-500 h-1 rounded-full transition-all duration-500" style="width: 15%"></div>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-300">
+                  <span id="active-trip-status" class="flex items-center gap-1.5 text-emerald-400 text-[10px]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    المركبة في الطريق إلى الموقع (وصول: 3 دقائق)
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="triggerSOSAlert()" class="px-2 py-0.5 rounded bg-red-950/60 text-red-400 border border-red-500/30 text-[10px] font-medium hover:bg-red-900/60 transition">
+                      طوارئ SOS
+                    </button>
+                    <button onclick="shareLiveTrip()" class="px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-white/[0.08] text-[10px] hover:text-white transition">
+                      مشاركة
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: MOVE DRIVER PRO                    -->
+    <!-- ========================================== -->
+    <section id="view-driver" class="tab-content hidden transition-opacity duration-200">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Driver Economics & Value Proposition -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 text-xs font-medium mb-3 border border-emerald-500/20">
+              <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+              منظومة الشركاء السائقين — Move Driver Pro
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white tracking-tight leading-snug">
+              تحسين إنتاجية السائق بنسبة 40% وإلغاء المسافات المقطوعة بدون ركاب
+            </h2>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              انطلاقاً من انخفاض سعر الوقود في ليبيا (0.15 د.ل للتر)، فإن التكلفة التشغيلية الحقيقية تكمن في إهلاك الإطارات والمحرك. المنصة تعالج هذا الهدر عبر توجيه السائق لرحلات عودة مضمونة.
+            </p>
+
+            <div class="grid grid-cols-2 gap-3 mt-5">
+              <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.05]">
+                <span class="text-[11px] text-slate-400">متوسط الدخل اليومي:</span>
+                <div class="text-lg font-semibold font-mono text-white mt-1">215.00 د.ل</div>
+                <span class="text-[10px] text-slate-500 mt-0.5 block">10 إلى 12 مشوار يومياً</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.05]">
+                <span class="text-[11px] text-slate-400">صافي الربح الشهري المقدر:</span>
+                <div class="text-lg font-semibold font-mono text-emerald-400 mt-1">~4,073 د.ل</div>
+                <span class="text-[10px] text-slate-500 mt-0.5 block">بعد خصم الصيانة والعمولة</span>
+              </div>
+            </div>
+
+            <div class="mt-5 space-y-2.5">
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="map" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">خريطة بؤر الطلب التنبؤية</h4>
+                  <p class="text-[11px] text-slate-400">توجيه السائق قبل 15 دقيقة لمناطق النشاط الإداري والجامعي في طرابلس.</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">Smart Return — مطابقة رحلة العودة</h4>
+                  <p class="text-[11px] text-slate-400">ربط السائق آلياً بطلب عودة عند وصوله إلى أطراف العاصمة (مطار معيتيقة أو جنزور).</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#070a11]/60 border border-white/[0.05] flex items-start gap-3">
+                <div class="p-1.5 rounded bg-slate-800 text-slate-300 shrink-0">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-white">برنامج شراكة الصيانة Move Hub</h4>
+                  <p class="text-[11px] text-slate-400">خصومات على الزيوت وقطع الغيار والإطارات مع ورش ومراكز صيانة معتمدة.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Mobile Simulator for Driver -->
+        <div class="lg:col-span-7 flex justify-center">
+          <div class="device-frame">
+            
+            <div class="device-speaker-notch"></div>
+            
+            <div class="h-9 px-6 pt-2 flex items-center justify-between text-[11px] text-slate-400 select-none z-20">
+              <span>15:32</span>
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="wifi" class="w-3 h-3 text-slate-400"></i>
+                <i data-lucide="battery" class="w-3 h-3 text-slate-400"></i>
+                <span class="text-[10px] text-emerald-400 font-medium">نشط</span>
+              </div>
+            </div>
+
+            <!-- In-App Header -->
+            <div class="px-5 py-3 border-b border-white/[0.06] bg-[#0d1322] flex items-center justify-between z-20">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center font-medium text-xs text-slate-200">
+                  ط.و
+                </div>
+                <div>
+                  <h3 class="text-xs font-semibold text-white">طارق الورفلي</h3>
+                  <div class="flex items-center gap-1 text-[10px] text-slate-400">
+                    <span class="text-slate-300 font-medium">تقييم 4.94</span>
+                    <span>• شريك بلاتيني</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Online/Offline Switch -->
+              <div class="flex items-center gap-2">
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="driver-status-toggle" checked onchange="toggleDriverOnlineStatus()" class="sr-only peer">
+                  <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                </label>
+                <span id="driver-status-label" class="text-xs font-medium text-emerald-400">متاح</span>
+              </div>
+            </div>
+
+            <!-- Scrollable Content of Driver App -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 z-10">
+
+              <!-- AI Demand Alert -->
+              <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-500/20 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="p-1.5 rounded bg-emerald-500/10 text-emerald-400">
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-medium text-white">تنبيه ذكاء اصطناعي لبؤرة طلب:</h4>
+                    <p class="text-[10px] text-slate-400 mt-0.5">منطقة <strong class="text-slate-200">بن عاشور والظهرة</strong> تشهد كثافة طلب مرتفعة (+1.25x).</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SMART RETURN RIDE OPPORTUNITY CARD -->
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-white/[0.08]">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-[11px] font-medium text-slate-200 flex items-center gap-1.5">
+                    <i data-lucide="corner-down-left" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    فرصة مشوار عودة ذكي (Smart Return)
+                  </span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">وفر 18 كم</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-snug">
+                  راكب في <strong class="text-slate-300">تاجوراء</strong> يطلب رحلة إلى <strong class="text-slate-300">وسط المدينة</strong> الساعة 16:10.
+                </p>
+                <div class="flex items-center justify-between mt-3 pt-2 border-t border-white/[0.06] text-xs">
+                  <span class="text-emerald-400 font-mono font-medium text-xs">+28.00 د.ل</span>
+                  <button onclick="acceptSmartReturnDemo()" id="btn-accept-return" class="px-3 py-1 rounded-md bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-medium text-xs transition">
+                    قبول مشوار العودة
+                  </button>
+                </div>
+              </div>
+
+              <!-- Driver Performance Counters -->
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-3 rounded-xl bg-slate-900/80 border border-white/[0.06]">
+                  <span class="text-[10px] text-slate-400">إجمالي دخل اليوم:</span>
+                  <div class="text-base font-semibold font-mono text-white mt-0.5">215.00 د.ل</div>
+                  <div class="text-[10px] text-slate-500 mt-1 flex justify-between">
+                    <span>10 مشاوير</span>
+                    <span class="text-emerald-400">صافي: 173 د.ل</span>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-900/80 border border-white/[0.06]">
+                  <span class="text-[10px] text-slate-400">عمولة المنصة (18%):</span>
+                  <div class="text-base font-semibold font-mono text-slate-300 mt-0.5">38.70 د.ل</div>
+                  <div class="text-[10px] text-slate-500 mt-1 flex justify-between">
+                    <span>وقود: ~3.0 د.ل</span>
+                    <span class="text-slate-300">رصيد: 142 د.ل</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- INCOMING TRIP DISPATCH CARD -->
+              <div id="driver-incoming-card" class="p-3.5 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-medium text-emerald-400 flex items-center gap-1.5">
+                    <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+                    طلب رحلة وارد (Move Choice)
+                  </span>
+                  <span class="text-[10px] text-slate-400">
+                    يبعد 600 م (2 دقيقة)
+                  </span>
+                </div>
+
+                <div class="space-y-1 text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span class="text-slate-400">الانطلاق: <strong class="text-slate-200">برج طرابلس (طريق الشط)</strong></span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                    <span class="text-slate-400">الوجهة: <strong class="text-slate-200">بن عاشور - شارع الجرابة</strong></span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between p-2 rounded bg-[#070a11] border border-white/[0.06] text-xs">
+                  <div>
+                    <span class="text-[10px] text-slate-500">القيمة التقديرية:</span>
+                    <div class="text-sm font-semibold font-mono text-emerald-400">18.50 د.ل</div>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] text-slate-500">الراكب:</span>
+                    <div class="text-xs text-slate-200">أحمد الفيتوري (4.9)</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                  <button onclick="acceptIncomingTripDriver()" class="flex-1 py-2 rounded bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-medium text-xs transition">
+                    قبول المشوار
+                  </button>
+                  <button onclick="declineIncomingTripDriver()" class="px-3 py-2 rounded bg-slate-800 text-slate-400 hover:text-slate-200 text-xs transition">
+                    تجاهل
+                  </button>
+                </div>
+              </div>
+
+              <!-- Driver Tier Benefits -->
+              <div class="p-3 rounded-xl bg-slate-900/60 border border-white/[0.06] space-y-1.5">
+                <span class="text-xs font-medium text-white flex items-center gap-1.5">
+                  <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                  مزايا الشريك المعتمد
+                </span>
+                <ul class="text-[10px] text-slate-400 space-y-1 list-disc list-inside">
+                  <li>خصم 25% على تبديل الزيوت والإطارات لدى الورش المعتمدة</li>
+                  <li>أولوية الاستلام لمشاوير مطار معيتيقة الدولي</li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: MOVE BUSINESS & FLEET (B2B)        -->
+    <!-- ========================================== -->
+    <section id="view-business" class="tab-content hidden transition-opacity duration-200 space-y-6">
+      
+      <!-- Top Corporate Overview -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-medium mb-2 border border-white/[0.08]">
+              <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+              بوابة النقل المؤسسي والأساطيل (Move Business & Fleet)
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white">
+              لوحة تحكم الشركات: <span class="text-slate-200 font-light">شركة المدار الجديد (Al-Madar Telecomm)</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              إدارة حركة موظفي الشركة بفواتير شهرية موحدة وحصص استهلاك رقمية تلغي المعاملات النقدية الورقية.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <button onclick="downloadCorporateTaxInvoice()" class="px-3.5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-medium text-xs flex items-center gap-1.5 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>تحميل الفاتورة الضريبية الموحدة</span>
+            </button>
+            <button class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/[0.08] text-xs font-medium flex items-center gap-1.5 transition">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>إضافة حساب موظف</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Corporate KPI Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">إجمالي رحلات الشهر:</span>
+            <div class="text-xl font-semibold font-mono text-white mt-1">1,420 رحلة</div>
+            <span class="text-[10px] text-emerald-400 mt-0.5 block">+18% نمو الكفاءة</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">الميزانية المستهلكة:</span>
+            <div class="text-xl font-semibold font-mono text-slate-200 mt-1">28,450 د.ل</div>
+            <span class="text-[10px] text-slate-500 mt-0.5 block">من سقف 35,000 د.ل (81%)</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">الموظفون المعتمدون:</span>
+            <div class="text-xl font-semibold font-mono text-white mt-1">186 موظفاً</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block">142 نشطاً هذا الأسبوع</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">الوفر المالي التقديري:</span>
+            <div class="text-xl font-semibold font-mono text-emerald-400 mt-1">9,200 د.ل</div>
+            <span class="text-[10px] text-slate-500 mt-0.5 block">مقارنة ببدلات النقل السابقة</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corporate Sub-modules -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Rides Audit Table -->
+        <div class="lg:col-span-8 glass-panel p-5 rounded-2xl border border-white/[0.06]">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+              <i data-lucide="list" class="w-4 h-4 text-slate-400"></i>
+              سجل رحلات الموظفين المباشر (Corporate Ride Audit)
+            </h3>
+            <span class="text-[11px] text-slate-500">أحدث 4 رحلات</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-white/[0.06] pb-2 text-[11px]">
+                  <th class="py-2.5 font-medium">الموظف والقسم</th>
+                  <th class="py-2.5 font-medium">المسار</th>
+                  <th class="py-2.5 font-medium">التاريخ والوقت</th>
+                  <th class="py-2.5 font-medium">التكلفة</th>
+                  <th class="py-2.5 font-medium">الحالة</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/[0.04] text-slate-300">
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-2.5">
+                    <span class="block text-white font-medium">م. أسامة الزنتاني</span>
+                    <span class="text-[10px] text-slate-400">قسم الشبكات والاتصالات</span>
+                  </td>
+                  <td class="py-2.5">برج طرابلس ← معيتيقة</td>
+                  <td class="py-2.5 text-slate-400">اليوم، 14:15</td>
+                  <td class="py-2.5 font-mono text-emerald-400">22.00 د.ل</td>
+                  <td class="py-2.5">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px]">مكتملة</span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-2.5">
+                    <span class="block text-white font-medium">سارة الترهوني</span>
+                    <span class="text-[10px] text-slate-400">إدارة الموارد البشرية</span>
+                  </td>
+                  <td class="py-2.5">حي الأندلس ← وزارة الاتصالات</td>
+                  <td class="py-2.5 text-slate-400">اليوم، 12:40</td>
+                  <td class="py-2.5 font-mono text-emerald-400">18.50 د.ل</td>
+                  <td class="py-2.5">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px]">مكتملة</span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-2.5">
+                    <span class="block text-white font-medium">م. فيصل الكيلاني</span>
+                    <span class="text-[10px] text-slate-400">الفريق الفني الميداني</span>
+                  </td>
+                  <td class="py-2.5">سوق الجمعة ← تاجوراء</td>
+                  <td class="py-2.5 text-slate-400">اليوم، 11:10</td>
+                  <td class="py-2.5 font-mono text-emerald-400">26.00 د.ل</td>
+                  <td class="py-2.5">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px]">مكتملة</span>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/40 transition">
+                  <td class="py-2.5">
+                    <span class="block text-white font-medium">د. كمال الغرياني</span>
+                    <span class="text-[10px] text-slate-400">الإدارة التنفيذية</span>
+                  </td>
+                  <td class="py-2.5">مطار معيتيقة ← فندق ريكسوس</td>
+                  <td class="py-2.5 text-slate-400">أمس، 18:30</td>
+                  <td class="py-2.5 font-mono text-emerald-400">45.00 د.ل</td>
+                  <td class="py-2.5">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px]">مكتملة</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Move Fleet SaaS View -->
+        <div class="lg:col-span-4 glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+              <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
+              Move Fleet SaaS
+            </h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">8 مركبات تتبع</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            نظام تتبع أسطول سيارات الشركة عبر GPS لمراقبة السرعة، استهلاك الوقود، ومواعيد الصيانة.
+          </p>
+
+          <div class="space-y-2 pt-1">
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-white font-medium">تويوتا هايلوكس (مركبة صيانة #1)</span>
+                <span class="text-emerald-400 text-[10px]">متحركة (48 كم/س)</span>
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                <span>طريق الشط - طرابلس</span>
+                <span>الوقود: 72%</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-white font-medium">هيونداي H1 (حافلة موظفين)</span>
+                <span class="text-slate-400 text-[10px]">متوقفة (المقر الرئيسي)</span>
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                <span>حي الأندلس</span>
+                <span>صيانة دورية: بعد 1,200 كم</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06]">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-white font-medium">نيسان باترول (مركبة الاستقبال)</span>
+                <span class="text-emerald-400 text-[10px]">في الخدمة</span>
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                <span>مطار معيتيقة</span>
+                <span>الوقود: 88%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 4: ADMIN AI DISPATCH & OPS            -->
+    <!-- ========================================== -->
+    <section id="view-admin" class="tab-content hidden transition-opacity duration-200 space-y-6">
+      
+      <!-- Ops Center Title & Live Stats -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-medium mb-2 border border-white/[0.08]">
+              <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+              مركز القيادة والتحكم الذكي — Tripoli AI Ops
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white">
+              مراقبة عمليات طرابلس الكبرى والتحكم في محرك التسعير اللحظي
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              متابعة توازن العرض والطلب، سرعة مطابقة المشاوير، خوارزمية التسعير الديناميكي (Surge AI)، وبلاغات السلامة.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+            <span class="px-2.5 py-1 rounded bg-[#070a11] border border-white/[0.06]">
+              Ping: <strong class="text-emerald-400 font-normal">24ms</strong>
+            </span>
+            <span class="px-2.5 py-1 rounded bg-[#070a11] border border-white/[0.06]">
+              Grid: <strong class="text-slate-200 font-normal">H3 Res-8</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- 5 Key Ops Stats Counters -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-6">
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] text-center">
+            <span class="text-[10px] text-slate-400">السائقون المتصلون:</span>
+            <div class="text-lg font-semibold font-mono text-white mt-1">342 سائقاً</div>
+            <span class="text-[10px] text-emerald-400">82% نسبة التشغيل</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] text-center">
+            <span class="text-[10px] text-slate-400">الرحلات الجارية:</span>
+            <div class="text-lg font-semibold font-mono text-white mt-1">89 رحلة</div>
+            <span class="text-[10px] text-slate-400">في شوارع طرابلس</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] text-center">
+            <span class="text-[10px] text-slate-400">متوسط زمن الوصول:</span>
+            <div class="text-lg font-semibold font-mono text-emerald-400 mt-1">4.1 دقيقة</div>
+            <span class="text-[10px] text-slate-400">كفاءة التوزيع المسبق</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] text-center">
+            <span class="text-[10px] text-slate-400">نسبة الإتمام:</span>
+            <div class="text-lg font-semibold font-mono text-white mt-1">93.8%</div>
+            <span class="text-[10px] text-emerald-400">إلغاء &lt; 6.2%</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] text-center">
+            <span class="text-[10px] text-slate-400">قيمة المعاملات اليوم:</span>
+            <div class="text-lg font-semibold font-mono text-white mt-1">18,450 د.ل</div>
+            <span class="text-[10px] text-slate-400">عمولة المنصة: 3,321 د.ل</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Incident Log Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: AI Dynamic Surge -->
+        <div class="lg:col-span-6 glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+              <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+              معامل التسعير الديناميكي (Dynamic Surge AI)
+            </h3>
+            <span id="surge-indicator" class="text-xs px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+              1.15x
+            </span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-3">
+            <div class="flex justify-between text-xs text-slate-300">
+              <span>تعديل مضاعف الذروة العام في طرابلس:</span>
+              <span id="surge-slider-val" class="font-mono text-emerald-400">1.15x</span>
+            </div>
+            <input type="range" id="surge-slider" min="1.0" max="2.0" step="0.05" value="1.15" oninput="updateSurgeMultiplier(this.value)" class="w-full cursor-pointer h-1.5 bg-slate-800 rounded">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>1.0x (اعتيادي)</span>
+              <span>1.3x (ذروة أعمال)</span>
+              <span>1.6x (ازدحام شديد)</span>
+              <span>2.0x (ظروف جوية)</span>
+            </div>
+          </div>
+
+          <!-- Zones Table -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-medium text-slate-300">مؤشرات مناطق طرابلس الكبرى:</h4>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex justify-between items-center">
+                <span>بن عاشور (Ben Ashour)</span>
+                <span class="text-slate-300 font-mono">1.25x</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex justify-between items-center">
+                <span>حي الأندلس (Hai Al-Andalus)</span>
+                <span class="text-slate-300 font-mono">1.10x</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex justify-between items-center">
+                <span>مطار معيتيقة (Mitiga Airport)</span>
+                <span class="text-slate-300 font-mono">1.35x</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex justify-between items-center">
+                <span>تاجوراء (Tajoura Hub)</span>
+                <span class="text-emerald-400 font-mono">0.85x</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Safety Feed -->
+        <div class="lg:col-span-6 glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-slate-400"></i>
+              سجل السلامة والإنذارات (Move Safety Feed)
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-white/[0.06]">
+              الوضع مستقر
+            </span>
+          </div>
+
+          <div class="space-y-2">
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex items-start gap-2.5">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></div>
+              <div class="flex-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-medium text-white">تطابق رمز PIN — رحلة #8942</span>
+                  <span class="text-[10px] text-slate-400">منذ دقيقتين</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5">تم تطابق الرمز وبدء الرحلة بأمان من شارع النصر إلى زاوية الدهماني.</p>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex items-start gap-2.5">
+              <div class="w-2 h-2 rounded-full bg-slate-400 mt-1.5 shrink-0"></div>
+              <div class="flex-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-medium text-white">انحراف مسار فرعي — رحلة #8930</span>
+                  <span class="text-[10px] text-slate-400">منذ 8 دقائق</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5">سلك السائق مساراً بديلاً لتفادي ازدحام جزيرة باب العزيزية؛ تم التواصل وتأكيد السلامة.</p>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-[#070a11]/60 border border-white/[0.06] flex items-start gap-2.5">
+              <div class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></div>
+              <div class="flex-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-medium text-white">اعتماد 14 مركبة جديدة في مركز Move Hub</span>
+                  <span class="text-[10px] text-slate-400">اليوم، 11:00</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5">تم فحص السلامة الفنية والرخص ونظام التكييف واعتماد السائقين الجدد.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <button onclick="triggerSimulatedSOSAdmin()" class="w-full py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-white/[0.08] text-xs font-medium transition flex items-center justify-center gap-1.5">
+              <i data-lucide="bell" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span>محاكاة بلاغ طوارئ SOS تجريبي</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: STRATEGIC FINANCIAL & ROI MODEL    -->
+    <!-- ========================================== -->
+    <section id="view-financial" class="tab-content hidden transition-opacity duration-200 space-y-6">
+      
+      <!-- Top Title -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-medium mb-2 border border-white/[0.08]">
+              <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+              المحاكي المالي التفاعلي (Interactive Investment Simulator)
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white">
+              نمذجة الإيرادات، العائد الداخلي (IRR)، وتوقعات نقطة التعادل
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              مبني على بيانات السوق الحقيقية في طرابلس الكبرى ونموذج Asset-Light فائق الكفاءة التشغيلية.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 rounded-lg bg-[#070a11] border border-white/[0.06] text-xs text-slate-300">
+              الجولة الاستثمارية المستهدفة: <strong class="text-emerald-400 font-mono font-normal">$120k – $150k</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- 4 Interactive Sliders -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+          
+          <!-- Slider 1: Active Drivers -->
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-400">عدد السائقين النشطين:</span>
+              <span id="val-drivers" class="font-mono text-white text-xs">300 سائق</span>
+            </div>
+            <input type="range" id="slider-drivers" min="50" max="2500" step="50" value="300" oninput="runFinancialSimulation()" class="w-full cursor-pointer h-1.5 bg-slate-800 rounded">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>50 (المرحلة 1)</span>
+              <span>500 (طرابلس)</span>
+              <span>2500 (ليبيا)</span>
+            </div>
+          </div>
+
+          <!-- Slider 2: Trips per Driver per Day -->
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-400">مشاوير السائق / يومياً:</span>
+              <span id="val-trips-day" class="font-mono text-white text-xs">10 مشاوير</span>
+            </div>
+            <input type="range" id="slider-trips-day" min="6" max="15" step="1" value="10" oninput="runFinancialSimulation()" class="w-full cursor-pointer h-1.5 bg-slate-800 rounded">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>6 (جزئي)</span>
+              <span>10 (متوسط)</span>
+              <span>15 (ذروة)</span>
+            </div>
+          </div>
+
+          <!-- Slider 3: Average Ticket / Fare (LYD) -->
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-400">متوسط قيمة المشوار:</span>
+              <span id="val-ticket-price" class="font-mono text-white text-xs">21.50 د.ل</span>
+            </div>
+            <input type="range" id="slider-ticket-price" min="15" max="32" step="0.5" value="21.5" oninput="runFinancialSimulation()" class="w-full cursor-pointer h-1.5 bg-slate-800 rounded">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>15 د.ل (قصير)</span>
+              <span>21.5 د.ل (متوسط)</span>
+              <span>32 د.ل (ضواحي)</span>
+            </div>
+          </div>
+
+          <!-- Slider 4: Platform Take Rate % -->
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-slate-400">عمولة المنصة:</span>
+              <span id="val-take-rate" class="font-mono text-emerald-400 text-xs">18.0%</span>
+            </div>
+            <input type="range" id="slider-take-rate" min="12" max="22" step="0.5" value="18.0" oninput="runFinancialSimulation()" class="w-full cursor-pointer h-1.5 bg-slate-800 rounded">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>12%</span>
+              <span>18%</span>
+              <span>22%</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Real-Time Calculated Dynamic Outputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        
+        <div class="glass-panel p-4 rounded-xl border border-white/[0.06]">
+          <span class="text-[11px] text-slate-400">إجمالي قيمة المعاملات الشهرية (GMV):</span>
+          <div class="text-xl font-semibold font-mono text-white mt-1" id="calc-monthly-gmv">1,935,000 د.ل</div>
+          <span class="text-[10px] text-slate-500 mt-1 block" id="calc-monthly-trips">90,000 مشوار شهرياً</span>
+        </div>
+
+        <div class="glass-panel p-4 rounded-xl border border-emerald-500/30">
+          <span class="text-[11px] text-slate-400">صافي إيراد المنصة الشهري:</span>
+          <div class="text-xl font-semibold font-mono text-emerald-400 mt-1" id="calc-monthly-revenue">348,300 د.ل</div>
+          <span class="text-[10px] text-slate-400 mt-1 block" id="calc-annual-revenue">4.18 مليون د.ل سنوياً</span>
+        </div>
+
+        <div class="glass-panel p-4 rounded-xl border border-white/[0.06]">
+          <span class="text-[11px] text-slate-400">صافي ربح السائق الشهري التقديري:</span>
+          <div class="text-xl font-semibold font-mono text-white mt-1" id="calc-driver-income">4,073 د.ل</div>
+          <span class="text-[10px] text-slate-500 mt-1 block">بعد خصم العمولة والوقود ومخصص الصيانة</span>
+        </div>
+
+        <div class="glass-panel p-4 rounded-xl border border-white/[0.06]">
+          <span class="text-[11px] text-slate-400">الأرباح التشغيلية المقدرة (EBITDA):</span>
+          <div class="text-xl font-semibold font-mono text-emerald-400 mt-1" id="calc-monthly-ebitda">168,000 د.ل</div>
+          <span class="text-[10px] text-emerald-400 mt-1 block" id="calc-ebitda-margin">هامش ربح ~48.2%</span>
+        </div>
+
+      </div>
+
+      <!-- Financial Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: 36-Month Growth Chart -->
+        <div class="lg:col-span-8 glass-panel p-5 rounded-2xl border border-white/[0.06]">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+                توقعات نمو الإيرادات لـ 3 سنوات (طرابلس ← مصراتة ← بنغازي)
+              </h3>
+              <p class="text-[11px] text-slate-400">التدرج من 150 سائقاً في طرابلس إلى 2,500 سائق في عموم ليبيا</p>
+            </div>
+            <span class="text-[11px] px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              نقطة التعادل: الشهر 11
+            </span>
+          </div>
+
+          <div class="h-[280px] w-full">
+            <canvas id="growthChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Right: Revenue Streams Doughnut -->
+        <div class="lg:col-span-4 glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-slate-400"></i>
+            تنويع مصادر الإيرادات
+          </h3>
+          <p class="text-[11px] text-slate-400">
+            توزيع إيرادات الشركة عند اكتمال الخدمات في السنة الثالثة
+          </p>
+
+          <div class="h-[220px] w-full flex items-center justify-center">
+            <canvas id="revenuePieChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 6: STARTUP COSTS & RUNWAY PLAN        -->
+    <!-- ========================================== -->
+    <section id="view-costs" class="tab-content hidden transition-opacity duration-200 space-y-6">
+      
+      <!-- Top Title & Runway Summary -->
+      <div class="glass-panel p-6 rounded-2xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-medium mb-2 border border-white/[0.08]">
+              <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
+              ميزانية التأسيس وخطة السيولة (Capital Allocation & Runway Plan)
+            </div>
+            <h2 class="text-xl font-semibold font-heading text-white">
+              تكاليف الإطلاق التفصيلية، معدل الاستهلاك الشهري (Burn Rate)، ونقطة التعادل
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              خطة إنفاق مرحلية تغطي 14 إلى 15 شهراً حتى الوصول إلى الاستدامة الذاتية في طرابلس الكبرى.
+            </p>
+          </div>
+
+          <!-- Tier Toggle (Lean vs Standard Tripoli Launch) -->
+          <div class="flex items-center gap-2 bg-[#070a11] p-1 rounded-xl border border-white/[0.08]">
+            <button onclick="toggleCostTier('recommended')" id="btn-tier-recommended" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white border border-white/[0.08] transition">
+              خطة التشغيل القياسية (135,000 د.ل)
+            </button>
+            <button onclick="toggleCostTier('lean')" id="btn-tier-lean" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition">
+              خطة الإطلاق السريع (80,000 د.ل)
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Top KPI Cards for Capital -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">إجمالي رأس المال المطلوب:</span>
+            <div class="text-xl font-semibold font-mono text-white mt-1" id="cost-total-cap">135,000 د.ل</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block" id="cost-total-lyd">حوالي ~18,800 دولار فقط</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-emerald-500/20">
+            <span class="text-[11px] text-slate-400">فترة تغطية السيولة (Cash Runway):</span>
+            <div class="text-xl font-semibold font-mono text-emerald-400 mt-1" id="cost-runway-months">6 إلى 8 أشهر</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block">حتى الاستدامة والربحية التامة</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">نقطة التعادل التشغيلي:</span>
+            <div class="text-xl font-semibold font-mono text-white mt-1">الشهر 3 – 4</div>
+            <span class="text-[10px] text-emerald-400 mt-0.5 block">عند الوصول إلى 80 – 100 سائق</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#070a11]/60 border border-white/[0.06]">
+            <span class="text-[11px] text-slate-400">مخصص الطوارئ والسيولة الآمنة:</span>
+            <div class="text-xl font-semibold font-mono text-slate-200 mt-1" id="cost-contingency">9,500 د.ل</div>
+            <span class="text-[10px] text-slate-500 mt-0.5 block">احتياطي سيولة نقدية في الخزينة</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line-Item Categories Grid (6 Cards) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <!-- Category 1: Tech & Cloud -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="code" class="w-4 h-4 text-slate-400"></i>
+              البرمجيات والخوادم
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-tech">38,000 د.ل (28.0%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            تطبيقات الجوال (Flutter iOS/Android)، خوادم Go وPostGIS، خوادم خرائط OSRM ذاتية بدون تكاليف شهرية، ورسائل OTP.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>تطبيقا الركاب والسائقين (مرة واحدة):</span> <span class="font-mono text-slate-300">22,000 د.ل</span></li>
+            <li class="flex justify-between"><span>محرك المطابقة وخوارزمية Move Choice:</span> <span class="font-mono text-slate-300">11,000 د.ل</span></li>
+            <li class="flex justify-between"><span>الخوادم السحابية VPS (سنة كاملة):</span> <span class="font-mono text-slate-300">3,000 د.ل</span></li>
+            <li class="flex justify-between"><span>رسائل التحقق OTP لـ 10k مستخدم:</span> <span class="font-mono text-slate-300">2,000 د.ل</span></li>
+          </ul>
+        </div>
+
+        <!-- Category 2: Marketing & Growth -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="megaphone" class="w-4 h-4 text-slate-400"></i>
+              التسويق وإعلانات طرابلس
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-mkt">18,000 د.ل (13.5%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            إعلانات ممولة على فيسبوك وتيك توك تستهدف شباب وموظفي طرابلس، وصناع محتوى محليين، وأكواد خصم للرحلة الأولى.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>إعلانات فيسبوك وإنستغرام (6 أشهر):</span> <span class="font-mono text-slate-300">9,000 د.ل</span></li>
+            <li class="flex justify-between"><span>صناع محتوى محليون لتجربة التطبيق:</span> <span class="font-mono text-slate-300">4,000 د.ل</span></li>
+            <li class="flex justify-between"><span>خصم 5 د.ل لأول 1,000 راكب جديد:</span> <span class="font-mono text-slate-300">5,000 د.ل</span></li>
+          </ul>
+        </div>
+
+        <!-- Category 3: Move Hub Tripoli -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-slate-400"></i>
+              مكتب التشغيل والفحص بطرابلس
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-hub">16,000 د.ل (12.0%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            مكتب لاستقبال السائقين وإجراء الفحص الفني للسيارة والتكييف وتدريبهم على التطبيق واستلام الأوراق.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>إيجار مكتب طرابلس (2,000 د.ل × 6 أشهر):</span> <span class="font-mono text-slate-300">12,000 د.ل</span></li>
+            <li class="flex justify-between"><span>تأثيث بسيط وطابعة بطاقات ومستندات:</span> <span class="font-mono text-slate-300">2,500 د.ل</span></li>
+            <li class="flex justify-between"><span>إنترنت فايبر سريع ومصاريف خدمية:</span> <span class="font-mono text-slate-300">1,500 د.ل</span></li>
+          </ul>
+        </div>
+
+        <!-- Category 4: Driver Onboarding -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4 text-slate-400"></i>
+              تجهيز وحوافز أول 100 سائق
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-drivers">5,500 د.ل (4.0%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            حامل هاتف مغناطيسي بالجملة، ملصقات براندينغ للسيارة، ومكافأة 50 دينار للسائق بعد إكمال أول 20 رحلة.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>حوامل هواتف مغناطيسية (15 د.ل × 100):</span> <span class="font-mono text-slate-300">1,500 د.ل</span></li>
+            <li class="flex justify-between"><span>ملصقات براندينغ للزجاج وبطاقات:</span> <span class="font-mono text-slate-300">500 د.ل</span></li>
+            <li class="flex justify-between"><span>حافز 50 د.ل لأول 50 سائقاً يكملون 20 رحلة:</span> <span class="font-mono text-slate-300">2,500 د.ل</span></li>
+            <li class="flex justify-between"><span>مواد تدريبية وفحص السلامة:</span> <span class="font-mono text-slate-300">1,000 د.ل</span></li>
+          </ul>
+        </div>
+
+        <!-- Category 5: Management Payroll -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+              رواتب الفريق المحلي (6 أشهر)
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-payroll">42,000 د.ل (31.0%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            رواتب فريق الإدارة والعمليات المحلي في طرابلس لضمان تشغيل سلس وخدمة عملاء مستمرة 24/7.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>مدير العمليات (2,500 د.ل × 6 أشهر):</span> <span class="font-mono text-slate-300">15,000 د.ل</span></li>
+            <li class="flex justify-between"><span>موظفان لخدمة العملاء والدعم (1,300 × 2 × 6):</span> <span class="font-mono text-slate-300">15,600 د.ل</span></li>
+            <li class="flex justify-between"><span>مسؤول فحص وتدريب السائقين (1,900 × 6):</span> <span class="font-mono text-slate-300">11,400 د.ل</span></li>
+          </ul>
+        </div>
+
+        <!-- Category 6: Legal & Contingency -->
+        <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white flex items-center gap-2">
+              <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+              التراخيص واحتياطي الخزينة
+            </span>
+            <span class="text-xs font-mono text-emerald-400 font-medium" id="cat-cost-legal">15,500 د.ل (11.5%)</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            السجل التجاري بطرابلس، التراخيص البلدية، العقود القانونية، وسيولة احتياطية في حساب الشركة.
+          </p>
+          <ul class="text-[10px] text-slate-400 space-y-1.5 pt-1 border-t border-white/[0.04]">
+            <li class="flex justify-between"><span>السجل التجاري والتراخيص البلدية بطرابلس:</span> <span class="font-mono text-slate-300">4,500 د.ل</span></li>
+            <li class="flex justify-between"><span>صياغة عقود السائقين والشروط القانونية:</span> <span class="font-mono text-slate-300">1,500 د.ل</span></li>
+            <li class="flex justify-between"><span>احتياطي سيولة نقدية في الخزينة:</span> <span class="font-mono text-slate-300">9,500 د.ل</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Cashflow Runway Table -->
+      <div class="glass-panel p-5 rounded-2xl border border-white/[0.06] space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-heading font-semibold text-sm text-white flex items-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+            جدول حركة السيولة والوصول للربحية (بناءً على رأس مال 135,000 د.ل)
+          </h3>
+          <span class="text-[11px] text-slate-400">القيم بالدينار الليبي (LYD)</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-right text-xs">
+            <thead>
+              <tr class="text-slate-400 border-b border-white/[0.06] pb-2 text-[11px]">
+                <th class="py-2.5 font-medium">المرحلة والشهر</th>
+                <th class="py-2.5 font-medium">عدد السائقين</th>
+                <th class="py-2.5 font-medium">المصروفات الشهرية</th>
+                <th class="py-2.5 font-medium">إيراد المنصة الصافي</th>
+                <th class="py-2.5 font-medium">صافي التدفق الشهري</th>
+                <th class="py-2.5 font-medium">رصيد الخزينة المتبقي</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.04] text-slate-300 font-mono">
+              <tr class="hover:bg-slate-900/40 transition">
+                <td class="py-2.5 font-sans font-medium text-white">شهر 1 (التطوير والتجهيز)</td>
+                <td class="py-2.5">0</td>
+                <td class="py-2.5 text-slate-400">35,000 د.ل</td>
+                <td class="py-2.5 text-slate-500">0 د.ل</td>
+                <td class="py-2.5 text-red-400">-35,000 د.ل</td>
+                <td class="py-2.5 text-white font-semibold">100,000 د.ل</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40 transition">
+                <td class="py-2.5 font-sans font-medium text-white">شهر 2 (تجهيز المقر وفحص 40 سائق)</td>
+                <td class="py-2.5">40</td>
+                <td class="py-2.5 text-slate-400">18,000 د.ل</td>
+                <td class="py-2.5 text-emerald-400">4,600 د.ل</td>
+                <td class="py-2.5 text-red-400">-13,400 د.ل</td>
+                <td class="py-2.5 text-white font-semibold">86,600 د.ل</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40 transition bg-emerald-950/20">
+                <td class="py-2.5 font-sans font-medium text-emerald-400 flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  شهر 3 (تغطية المصاريف وبداية الربحية)
+                </td>
+                <td class="py-2.5 text-emerald-400 font-semibold">80</td>
+                <td class="py-2.5 text-slate-400">14,000 د.ل</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">23,200 د.ل</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">+9,200 د.ل (فائض!)</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">95,800 د.ل</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40 transition">
+                <td class="py-2.5 font-sans font-medium text-white">شهر 4 (توسع بن عاشور والأندلس)</td>
+                <td class="py-2.5">120</td>
+                <td class="py-2.5 text-slate-400">15,000 د.ل</td>
+                <td class="py-2.5 text-emerald-400">46,400 د.ل</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">+31,400 د.ل</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">127,200 د.ل</td>
+              </tr>
+              <tr class="hover:bg-slate-900/40 transition">
+                <td class="py-2.5 font-sans font-medium text-white">شهر 6 (200 سائق نشط)</td>
+                <td class="py-2.5">200</td>
+                <td class="py-2.5 text-slate-400">18,000 د.ل</td>
+                <td class="py-2.5 text-emerald-400">96,750 د.ل</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">+78,750 د.ل (تنامي الأرباح)</td>
+                <td class="py-2.5 text-emerald-400 font-semibold">245,000 د.ل (أمان مالي تام)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tranche Funding & Protection -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+          <h4 class="text-xs font-semibold text-white flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            آلية تحرير رأس المال على دفعتين (Tranche-Based Investment)
+          </h4>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            لحماية المستثمر وضمان كفاءة الإنفاق، يتم تقسيم التمويل إلى دفعتين بالدينار الليبي:
+          </p>
+          <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+            <li><strong>الدفعة الأولى (70,000 د.ل):</strong> لإكمال التطوير التقني، تجهيز مكتب طرابلس، وتشغيل أول 50 سائقاً.</li>
+            <li><strong>الدفعة الثانية (65,000 د.ل):</strong> تدفع بعد الوصول إلى 10,000 مشوار ناجح لتكثيف الإعلانات والتوسع في الشركات.</li>
+          </ul>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#070a11]/60 border border-white/[0.06] space-y-2">
+          <h4 class="text-xs font-semibold text-white flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            عوامل الأمان الرأسمالي (Asset-Light Advantage)
+          </h4>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            الشركة لا تشتري سيارات ولا تتحمل مصاريف الجمارك أو قطع الغيار أو الوقود. هذا يجعل نقطة الخطر المالي محصورة في البرمجيات والتشغيل فقط، مع مرونة تامة في ضبط النفقات حسب سرعة نمو السوق.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: DOCUMENTATION & INVESTMENT DECK     -->
+  <!-- ========================================== -->
+  <div id="docs-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-[#0d1322] border border-white/10 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-[#070a11]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded bg-slate-800 border border-white/10 flex items-center justify-center text-slate-300">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-sm text-white">الملف الاستثماري ودراسة الجدوى التفصيلية</h3>
+            <p class="text-[11px] text-slate-400">LIBYA MOVE AI — Executive Investment Memorandum</p>
+          </div>
+        </div>
+        <button onclick="closeDocsModal()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Docs Tabs & Reader) -->
+      <div class="flex border-b border-white/[0.06] bg-[#070a11] px-6 gap-4 text-xs font-medium overflow-x-auto">
+        <button onclick="switchDocTab('memo')" id="doc-btn-memo" class="doc-tab-btn active py-3 border-b-2 border-emerald-400 text-emerald-400">
+          01. المذكرة التنفيذية
+        </button>
+        <button onclick="switchDocTab('market')" id="doc-btn-market" class="doc-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+          02. دراسة السوق الليبي الواقعية
+        </button>
+        <button onclick="switchDocTab('finance')" id="doc-btn-finance" class="doc-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+          03. النموذج المالي واقتصاديات الوحدة
+        </button>
+        <button onclick="switchDocTab('tech')" id="doc-btn-tech" class="doc-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+          04. المعمارية التقنية ومحركات AI
+        </button>
+        <button onclick="switchDocTab('costs')" id="doc-btn-costs" class="doc-tab-btn py-3 border-b-2 border-transparent text-slate-400 hover:text-white">
+          05. تكاليف التأسيس والميزانية
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 prose prose-invert max-w-none text-slate-300 text-xs sm:text-sm leading-relaxed" id="doc-content-container">
+        <!-- Loaded dynamically from app.js -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-white/[0.06] bg-[#070a11] flex items-center justify-between text-xs">
+        <span class="text-slate-500 text-[11px]">المستندات محفوظة بصيغة Markdown تفصيلية داخل مجلد المشروع.</span>
+        <button onclick="closeDocsModal()" class="px-3.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition text-xs">
+          إغلاق
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Audio element for subtle click feedback -->
+  <audio id="beep-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+  <!-- App Main Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>
